@@ -40,7 +40,7 @@ public class StatusProjetoModel extends RepresentationModel<StatusProjetoModel> 
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private UUID cdStatusProjeto;
 
-	@Column(nullable = false, unique = true, length = 100)
+	@Column(nullable = false, length = 100)
 	private String nome;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss")

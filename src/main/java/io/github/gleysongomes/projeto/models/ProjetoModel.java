@@ -39,7 +39,7 @@ public class ProjetoModel extends RepresentationModel<ProjetoModel> implements S
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private UUID cdProjeto;
 
-	@Column(nullable = false, unique = true)
+	@Column(nullable = false)
 	private String nome;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/YYYY HH:mm:ss")

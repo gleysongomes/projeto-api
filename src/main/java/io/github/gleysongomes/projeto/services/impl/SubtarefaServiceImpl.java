@@ -45,7 +45,23 @@ public class SubtarefaServiceImpl implements SubtarefaService {
 
 	@Override
 	public void excluir(SubtarefaModel subtarefaModel) {
+		log.debug("SERVICE: excluir subtarefa: {}", subtarefaModel);
 		subtarefaRepository.delete(subtarefaModel);
+	}
+
+	@Override
+	public Optional<SubtarefaModel> findByNomeAndTarefaCdTarefa(String nome, UUID cdTarefa) {
+		log.debug("SERVICE: buscar subtarefa de nome: {} e tarefa: {}", nome, cdTarefa);
+		return subtarefaRepository.findByNomeAndTarefaCdTarefa(nome, cdTarefa);
+	}
+
+	@Override
+	public Optional<SubtarefaModel> findByNomeAndTarefaCdTarefaAndCdSubtarefaNot(String nome, UUID cdTarefa,
+			UUID cdSubtarefa) {
+		log.debug(
+				"SERVICE: buscar subtarefa de nome: {} e tarefa: {}, que não seja a subtarefa que está sendo atualizada.",
+				nome, cdTarefa);
+		return subtarefaRepository.findByNomeAndTarefaCdTarefaAndCdSubtarefaNot(nome, cdTarefa, cdSubtarefa);
 	}
 
 }

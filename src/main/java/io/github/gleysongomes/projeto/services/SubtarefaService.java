@@ -18,4 +18,8 @@ public interface SubtarefaService {
 	void salvar(SubtarefaModel subtarefaModel);
 
 	void excluir(SubtarefaModel subtarefaModel);
+
+	Optional<SubtarefaModel> findByNomeAndTarefaCdTarefa(String nome, UUID cdTarefa);
+
+	Optional<SubtarefaModel> findByNomeAndTarefaCdTarefaAndCdSubtarefaNot(String nome, UUID cdTarefa, UUID cdSubtarefa);
 }

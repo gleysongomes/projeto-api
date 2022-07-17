@@ -1,6 +1,7 @@
 package io.github.gleysongomes.projeto.repositories;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,5 +16,9 @@ public interface SubtarefaRepository
 
 	@Query(value = "select * from tb_subtarefa where tarefa_cd_tarefa = :cdTarefa", nativeQuery = true)
 	List<SubtarefaModel> findSubtarefasByCdTarefa(@Param("cdTarefa") UUID cdTarefa);
+
+	Optional<SubtarefaModel> findByNomeAndTarefaCdTarefa(String nome, UUID cdTarefa);
+
+	Optional<SubtarefaModel> findByNomeAndTarefaCdTarefaAndCdSubtarefaNot(String nome, UUID cdTarefa, UUID cdSubtarefa);
 
 }

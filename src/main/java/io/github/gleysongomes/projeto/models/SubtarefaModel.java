@@ -15,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import org.springframework.hateoas.RepresentationModel;
 
@@ -29,7 +30,8 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @Entity
-@Table(name = "tb_subtarefa")
+@Table(name = "tb_subtarefa", uniqueConstraints = {
+		@UniqueConstraint(name = "uk_nome_cd_tarefa", columnNames = { "nome", "tarefa_cd_tarefa" }) })
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class SubtarefaModel extends RepresentationModel<SubtarefaModel> implements Serializable {

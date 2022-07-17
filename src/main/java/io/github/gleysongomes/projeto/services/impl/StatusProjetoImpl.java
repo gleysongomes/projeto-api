@@ -9,9 +9,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import io.github.gleysongomes.projeto.models.StatusProjetoModel;
-import io.github.gleysongomes.projeto.repositories.StatusProjetoRepository;
-import io.github.gleysongomes.projeto.services.StatusProjetoService;
+import io.github.gleysongomes.projeto.models.StatusModel;
+import io.github.gleysongomes.projeto.repositories.StatusRepository;
+import io.github.gleysongomes.projeto.services.StatusService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,32 +19,34 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class StatusProjetoImpl implements StatusProjetoService {
+public class StatusProjetoImpl implements StatusService {
 
-	private final StatusProjetoRepository statusProjetoRepository;
+	private final StatusRepository statusRepository;
 
 	@Override
-	public Optional<StatusProjetoModel> findById(UUID cdStatusProjeto) {
-		log.debug("SERVICE: listar status do projeto de código: {}", cdStatusProjeto);
-		return statusProjetoRepository.findById(cdStatusProjeto);
+	@Transactional(readOnly = true)
+	public Optional<StatusModel> findById(UUID cdStatus) {
+		log.debug("SERVICE: listar status de código: {}", cdStatus);
+		return statusRepository.findById(cdStatus);
 	}
 
 	@Override
-	public Page<StatusProjetoModel> listar(Specification<StatusProjetoModel> statusProjetoSpec, Pageable pageable) {
-		log.debug("SERVICE: buscar status do projeto com filtros: {} e paginação", statusProjetoSpec, pageable);
-		return statusProjetoRepository.findAll(statusProjetoSpec, pageable);
+	@Transactional(readOnly = true)
+	public Page<StatusModel> listar(Specification<StatusModel> statusSpec, Pageable pageable) {
+		log.debug("SERVICE: buscar status com filtros: {} e paginação", statusSpec, pageable);
+		return statusRepository.findAll(statusSpec, pageable);
 	}
 
 	@Override
-	public void salvar(StatusProjetoModel statusProjetoModel) {
-		log.debug("SERVICE: salvar status do projeto: {}", statusProjetoModel);
-		statusProjetoRepository.save(statusProjetoModel);
+	public void salvar(StatusModel statusModel) {
+		log.debug("SERVICE: salvar status: {}", statusModel);
+		statusRepository.save(statusModel);
 	}
 
 	@Override
-	public void excluir(StatusProjetoModel statusProjetoModel) {
-		log.debug("SERVICE: excluir status do projeto: {}", statusProjetoModel);
-		statusProjetoRepository.delete(statusProjetoModel);
+	public void excluir(StatusModel statusModel) {
+		log.debug("SERVICE: excluir status: {}", statusModel);
+		statusRepository.delete(statusModel);
 	}
 
 }

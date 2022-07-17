@@ -8,8 +8,6 @@ import java.time.ZoneId;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,12 +31,14 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 import io.github.gleysongomes.projeto.dtos.ProjetoDto;
 import io.github.gleysongomes.projeto.models.ProjetoModel;
-import io.github.gleysongomes.projeto.models.StatusProjetoModel;
+import io.github.gleysongomes.projeto.models.StatusModel;
 import io.github.gleysongomes.projeto.services.ProjetoService;
-import io.github.gleysongomes.projeto.services.StatusProjetoService;
+import io.github.gleysongomes.projeto.services.StatusService;
 import io.github.gleysongomes.projeto.specifications.SpecificationTemplate;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -47,9 +47,7 @@ public class ProjetoController {
 
 	private final ProjetoService projetoService;
 
-	private final StatusProjetoService statusProjetoService;
-
-	private final Logger log = LoggerFactory.getLogger(ProjetoController.class);
+	private final StatusService statusService;
 
 	@GetMapping
 	public ResponseEntity<Page<ProjetoModel>> listar(SpecificationTemplate.ProjetoSpec projetoSpec,
@@ -72,14 +70,14 @@ public class ProjetoController {
 	public ResponseEntity<Object> adicionar(
 			@RequestBody @Validated(ProjetoDto.ProjetoView.ProjetoPost.class) @JsonView(ProjetoDto.ProjetoView.ProjetoPost.class) ProjetoDto projetoDto) {
 		log.debug("CONTROLLER: salvar projeto: {}", projetoDto);
-		Optional<StatusProjetoModel> statusProjetoModelOptional = statusProjetoService
-				.findById(projetoDto.getCdStatusProjeto());
-		if (!statusProjetoModelOptional.isPresent()) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Status do projeto não encontrado.");
+		Optional<StatusModel> statusModelOptional = statusService.findById(projetoDto.getCdStatus());
+		if (!statusModelOptional.isPresent()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Status não encontrado.");
 		} else {
 			var projetoModel = new ProjetoModel();
 			BeanUtils.copyProperties(projetoDto, projetoModel);
 			projetoModel.setDtCadastro(LocalDateTime.now(ZoneId.of("UTC")));
+			projetoModel.setStatus(statusModelOptional.get());
 			projetoService.salvar(projetoModel);
 			return ResponseEntity.status(HttpStatus.CREATED).body(projetoModel);
 		}
@@ -93,14 +91,14 @@ public class ProjetoController {
 		if (!projetoModelOptional.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Projeto não encontrado.");
 		}
-		Optional<StatusProjetoModel> statusProjetoModelOptional = statusProjetoService
-				.findById(projetoDto.getCdStatusProjeto());
-		if (!statusProjetoModelOptional.isPresent()) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Status do projeto não encontrado.");
+		Optional<StatusModel> statusModelOptional = statusService.findById(projetoDto.getCdStatus());
+		if (!statusModelOptional.isPresent()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Status não encontrado.");
 		}
 		var projetoModel = projetoModelOptional.get();
 		BeanUtils.copyProperties(projetoDto, projetoModel);
 		projetoModel.setDtAtualizacao(LocalDateTime.now(ZoneId.of("UTC")));
+		projetoModel.setStatus(statusModelOptional.get());
 		projetoService.salvar(projetoModel);
 		return ResponseEntity.status(HttpStatus.OK).body(projetoModel);
 	}

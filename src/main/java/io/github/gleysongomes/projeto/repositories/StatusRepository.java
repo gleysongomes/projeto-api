@@ -5,8 +5,9 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
-import io.github.gleysongomes.projeto.models.StatusProjetoModel;
+import io.github.gleysongomes.projeto.models.StatusModel;
 
-public interface StatusProjetoRepository extends JpaRepository<StatusProjetoModel, UUID>, JpaSpecificationExecutor<StatusProjetoModel> {
+public interface StatusRepository
+		extends JpaRepository<StatusModel, UUID>, JpaSpecificationExecutor<StatusModel> {
 
 }

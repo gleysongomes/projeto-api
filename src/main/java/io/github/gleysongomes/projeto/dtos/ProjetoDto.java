@@ -22,6 +22,10 @@ public class ProjetoDto {
 	@JsonView({ ProjetoView.ProjetoPost.class, ProjetoView.ProjetoPut.class })
 	private String nome;
 
+	@NotBlank(groups = { ProjetoView.ProjetoPost.class, ProjetoView.ProjetoPut.class })
+	@JsonView({ ProjetoView.ProjetoPost.class, ProjetoView.ProjetoPut.class })
+	private String descricao;
+
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
 	@JsonView({ ProjetoView.ProjetoPost.class, ProjetoView.ProjetoPut.class })
 	private LocalDate dtInicio;
@@ -42,7 +46,7 @@ public class ProjetoDto {
 
 	@NotNull(groups = { ProjetoView.ProjetoPost.class, ProjetoView.ProjetoPut.class })
 	@JsonView({ ProjetoView.ProjetoPost.class, ProjetoView.ProjetoPut.class })
-	private UUID cdStatusProjeto;
+	private UUID cdStatus;
 
 	public interface ProjetoView {
 		public static interface ProjetoPost {
